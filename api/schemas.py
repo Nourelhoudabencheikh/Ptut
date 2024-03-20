@@ -2,7 +2,7 @@ from marshmallow import validate, validates, validates_schema, \
     ValidationError, post_dump, fields
 from api import ma, db
 from api.auth import token_auth
-from api.models import Patient, User
+from api.models import Patient, User, Montre
 from datetime import datetime
 
 
@@ -162,3 +162,21 @@ class UpdatePatientSchema(PatientSchema):
     dateNaissance = ma.auto_field(required=True)
     etat = ma.String(required=True)
     statistiques = ma.String(required=True)
+
+
+
+class MontreSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Montre
+        ordered = True
+
+    id = ma.auto_field(dump_only=True)
+    etat = ma.String(required=True)
+    patient_id = ma.Integer(required=True)
+
+  
+
+
+class UpdateMontreSchema(MontreSchema):
+    etat = ma.String(required=True)
+    

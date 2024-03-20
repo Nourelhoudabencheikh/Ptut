@@ -38,6 +38,9 @@ def create_app(config_class=Config):
     app.register_blueprint(fake)
     from api.patients import patients
     app.register_blueprint(patients, url_prefix='/api')
+    
+    from api.montres import montres
+    app.register_blueprint(montres, url_prefix='/api')
 
 
     @app.shell_context_processor

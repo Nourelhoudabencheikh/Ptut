@@ -174,4 +174,13 @@ class Patient (Updateable, Model):
         sa.String(120), index=True, unique=True)
     statistiques: so.Mapped[str] = so.mapped_column(
         sa.String(120), index=True, unique=True)
+    
+
+class Montre (Updateable, Model):
+    __tablename__ = 'montres'
+
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    etat: so.Mapped[str] = so.mapped_column(
+        sa.String(64), index=True, unique=True)
+    patient_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('patients.id'), index=True)
 

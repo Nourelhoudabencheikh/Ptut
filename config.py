@@ -65,7 +65,7 @@ class Config:
     APIFAIRY_TITLE = 'TDAH API'
     APIFAIRY_VERSION = '1.0'
     APIFAIRY_UI = os.environ.get('DOCS_UI', 'elements')
-    APIFAIRY_TAGS = ['tokens', 'users', 'patients']
+    APIFAIRY_TAGS = ['tokens', 'users', 'patients','montres']
 
     # email options
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'localhost')
