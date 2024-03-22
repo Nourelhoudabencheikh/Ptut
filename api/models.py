@@ -73,18 +73,25 @@ class User(Updateable, Model):
     __tablename__ = 'users'
 
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    username: so.Mapped[str] = so.mapped_column(
+    nom: so.Mapped[str] = so.mapped_column(
         sa.String(64), index=True, unique=True)
+    prenom: so.Mapped[str] = so.mapped_column(
+        sa.String(64), index=True, unique=True)
+    dateNaissance: so.Mapped[str] = so.mapped_column(
+        sa.String(120), index=True, unique=True)
+    etat: so.Mapped[str] = so.mapped_column(
+        sa.String(64), index=True, unique=True)
+
     email: so.Mapped[str] = so.mapped_column(
         sa.String(120), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
-    first_seen: so.Mapped[datetime] = so.mapped_column(default=datetime.utcnow)
-    last_seen: so.Mapped[datetime] = so.mapped_column(default=datetime.utcnow)
+    #first_seen: so.Mapped[datetime] = so.mapped_column(default=datetime.utcnow)
+   # last_seen: so.Mapped[datetime] = so.mapped_column(default=datetime.utcnow)
     tokens: so.WriteOnlyMapped['Token'] = so.relationship(
         back_populates='user')
 
     def __repr__(self):  # pragma: no cover
-        return '<User {}>'.format(self.username)
+        return '<User {}>'.format(self.nom)
 
     @property
     def url(self):
@@ -172,15 +179,65 @@ class Patient (Updateable, Model):
         sa.String(120), index=True, unique=True)
     etat: so.Mapped[str] = so.mapped_column(
         sa.String(120), index=True, unique=True)
-    statistiques: so.Mapped[str] = so.mapped_column(
+    classe: so.Mapped[str] = so.mapped_column(
         sa.String(120), index=True, unique=True)
+    poids: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    taille: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
     
 
 class Montre (Updateable, Model):
     __tablename__ = 'montres'
 
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    montre: so.Mapped[str] = so.mapped_column(
+        sa.String(64), index=True, unique=True)
+    debut: so.Mapped[str] = so.mapped_column(
+        sa.String(120), index=True, unique=True)
+    fin: so.Mapped[str] = so.mapped_column(
+        sa.String(120), index=True, unique=True)
     etat: so.Mapped[str] = so.mapped_column(
+        sa.String(64), index=True, unique=True)
+    marque: so.Mapped[str] = so.mapped_column(
         sa.String(64), index=True, unique=True)
     patient_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('patients.id'), index=True)
 
+
+class Capteur (Updateable, Model):
+    __tablename__ = 'capteurs'
+
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    typeCapteur: so.Mapped[str] = so.mapped_column(
+        sa.String(64), index=True, unique=True)
+    freqEchantillon: so.Mapped[int] = so.mapped_column(sa.INT(), index=True, unique=True)
+    montre_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('montres.id'), index=True)
+
+class Donnee_collectees (Updateable, Model):
+    __tablename__ = 'donnee_collectees'
+
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    dateTime: so.Mapped[str] = so.mapped_column(
+        sa.String(120), index=True, unique=True)
+    accX: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    accY: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    accZ: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    gyrX: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)    
+    gyrY: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    gyrZ: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    bpm: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    montre_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('montres.id'), index=True)
+
+
+class Resultat_journaliers (Updateable, Model):
+    __tablename__ = 'resultat journalier'
+
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    nbAlerte: so.Mapped[int] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    intensiteSed: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    intensiteLeg: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    intesiteMod: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    intensiteVig: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)    
+    dureeHorsLigne: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    dureePort: so.Mapped[float] = so.mapped_column(sa.Float(120), index=True, unique=True)
+    date: so.Mapped[str] = so.mapped_column(
+        sa.String(120), index=True, unique=True)
+    patient_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('patients.id'), index=True)

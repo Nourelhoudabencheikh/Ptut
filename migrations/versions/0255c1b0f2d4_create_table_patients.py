@@ -1,8 +1,8 @@
-"""create table patient
+"""create table patients
 
-Revision ID: 67b689fa4fe7
-Revises: 8b2122f28c47
-Create Date: 2024-03-06 17:29:42.621915
+Revision ID: 0255c1b0f2d4
+Revises: 9fe082cb8ce3
+Create Date: 2024-03-22 10:11:38.467609
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '67b689fa4fe7'
-down_revision = '8b2122f28c47'
+revision = '0255c1b0f2d4'
+down_revision= '9fe082cb8ce3'
 branch_labels = None
 depends_on = None
 
@@ -33,7 +33,10 @@ def upgrade_() -> None:
     sa.Column('prenom', sa.String(length=120), nullable=False),
     sa.Column('dateNaissance', sa.DateTime, nullable=False),
     sa.Column('etat', sa.String(length=120), nullable=False),
-    sa.Column('statistiques', sa.String(length=120), nullable=False),
+    sa.Column('classe', sa.String(length=64), nullable=False),
+    sa.Column('poids', sa.Float(), nullable=False),
+    sa.Column('taille', sa.Float(), nullable=False),
+
     sa.PrimaryKeyConstraint('id')
     
     )

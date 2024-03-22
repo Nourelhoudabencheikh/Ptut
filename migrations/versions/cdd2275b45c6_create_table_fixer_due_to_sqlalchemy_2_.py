@@ -1,8 +1,8 @@
-"""fixer due to sqlalchemy 2 0 migration
+"""create table fixer due to sqlalchemy 2 0 migration
 
-Revision ID: 8b2122f28c47
-Revises: 0f2ddfa2608f
-Create Date: 2024-03-06 17:29:36.832011
+Revision ID: cdd2275b45c6
+Revises: 8a11753cab79
+Create Date: 2024-03-22 10:11:37.165040
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision= '8b2122f28c47'
-down_revision = '0f2ddfa2608f'
+revision = 'cdd2275b45c6'
+down_revision = '8a11753cab79'
 branch_labels = None
 depends_on = None
 

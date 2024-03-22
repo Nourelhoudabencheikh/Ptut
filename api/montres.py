@@ -34,7 +34,7 @@ auth = HTTPBasicAuth()
 @authenticate(token_auth)
 @response(montre_schema, 201)
 def new(args):
-    """Créer un nouveau montre"""
+    """Créer un nouvelle montre"""
     montre = Montre(**args)
     print(montre,file=sys.stderr)
     db.session.add(montre)
@@ -64,7 +64,7 @@ def get(id):
 @response(montre_schema)
 @body(update_montre_schema)
 def update(data, id):
-    """Mettre à jour un montre"""
+    """Mettre à jour une montre"""
     montre = db.session.get(Montre, id)
     montre.update(data)
     db.session.commit()
@@ -76,7 +76,7 @@ def update(data, id):
 @response(EmptySchema, 204)
 @other_responses({404: 'montre not found'})
 def delete(id):
-    """Supprimer un montre"""
+    """Supprimer une montre"""
     montre = db.session.get(Montre, id)
     db.session.delete(montre)
     db.session.commit()

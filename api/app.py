@@ -41,6 +41,13 @@ def create_app(config_class=Config):
     
     from api.montres import montres
     app.register_blueprint(montres, url_prefix='/api')
+    from api.capteurs import capteurs
+    app.register_blueprint(capteurs, url_prefix='/api')
+    from api.donnee_collectees import donnee_collectees
+    app.register_blueprint(donnee_collectees, url_prefix='/api')
+    from api.resultat_journalier import resultat_journaliers
+    app.register_blueprint(resultat_journaliers, url_prefix='/api')
+
 
 
     @app.shell_context_processor

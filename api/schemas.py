@@ -2,7 +2,7 @@ from marshmallow import validate, validates, validates_schema, \
     ValidationError, post_dump, fields
 from api import ma, db
 from api.auth import token_auth
-from api.models import Patient, User, Montre
+from api.models import Patient, User, Montre, Capteur,Donnee_collectees, Resultat_journaliers
 from datetime import datetime
 
 
@@ -68,9 +68,15 @@ class UserSchema(ma.SQLAlchemySchema):
         ordered = True
 
     id = ma.auto_field(dump_only=True)
-    url = ma.String(dump_only=True)
-    username = ma.auto_field(required=True,
+    nom = ma.auto_field(required=True,
                              validate=validate.Length(min=3, max=64))
+    prenom = ma.auto_field(required=True,
+                             validate=validate.Length(min=3, max=64))
+    dateNaissance = ma.auto_field(required=True,
+                             validate=validate.Length(min=3, max=64))
+    etat = ma.auto_field(required=True,
+                             validate=validate.Length(min=3, max=64))
+
     email = ma.auto_field(required=True, validate=[validate.Length(max=120),
                                                    validate.Email()])
     password = ma.String(required=True, load_only=True,
@@ -78,15 +84,15 @@ class UserSchema(ma.SQLAlchemySchema):
     has_password = ma.Boolean(dump_only=True)
     
 
-    @validates('username')
-    def validate_username(self, value):
+    @validates('nom')
+    def validate_nom(self, value):
         if not value[0].isalpha():
-            raise ValidationError('Username must start with a letter')
+            raise ValidationError('nom must start with a letter')
         user = token_auth.current_user()
-        old_username = user.username if user else None
-        if value != old_username and \
-                db.session.scalar(User.select().filter_by(username=value)):
-            raise ValidationError('Use a different username.')
+        old_nom = user.nom if user else None
+        if value != old_nom and \
+                db.session.scalar(User.select().filter_by(nom=value)):
+            raise ValidationError('Use a different nom.')
 
     @validates('email')
     def validate_email(self, value):
@@ -152,7 +158,9 @@ class PatientSchema(ma.SQLAlchemySchema):
     prenom = ma.String(required=True)
     dateNaissance = ma.auto_field(required=True)
     etat = ma.String(required=True)
-    statistiques = ma.String(required=True)
+    classe = ma.String(required=True)
+    poids = ma.Float(required=True)
+    taille = ma.Float(required=True)
 
 
 class UpdatePatientSchema(PatientSchema):
@@ -161,7 +169,9 @@ class UpdatePatientSchema(PatientSchema):
     prenom = ma.String(required=True)
     dateNaissance = ma.auto_field(required=True)
     etat = ma.String(required=True)
-    statistiques = ma.String(required=True)
+    classe = ma.String(required=True)
+    poids = ma.Float(required=True)
+    taille = ma.Float(required=True)
 
 
 
@@ -171,12 +181,95 @@ class MontreSchema(ma.SQLAlchemySchema):
         ordered = True
 
     id = ma.auto_field(dump_only=True)
+    montre = ma.String(required=True)
+    debut = ma.String(required=True)
+    fin = ma.String(required=True)
     etat = ma.String(required=True)
+    marque = ma.String(required=True)
     patient_id = ma.Integer(required=True)
 
   
 
 
 class UpdateMontreSchema(MontreSchema):
+    montre = ma.String(required=True)
+    debut = ma.String(required=True)
+    fin = ma.String(required=True)
     etat = ma.String(required=True)
-    
+    marque = ma.String(required=True)
+
+class CapteurSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Capteur
+        ordered = True
+
+    id = ma.auto_field(dump_only=True)
+    typeCapteur = ma.String(required=True)
+    freqEchantillon = ma.Integer(required=True)
+    montre_id = ma.Integer(required=True)
+
+  
+
+
+class UpdateCapteurSchema(CapteurSchema):
+    typeCapteur = ma.String(required=True)
+    freqEchantillon = ma.Integer(required=True)
+
+
+class Donnee_collecteesSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Donnee_collectees
+        ordered = True
+
+    id = ma.auto_field(dump_only=True)
+    dateTime = ma.String(required=True)
+    accX = ma.Float(required=True)
+    accY = ma.Float(required=True)
+    accZ = ma.Float(required=True)
+    gyrX = ma.Float(required=True)
+    gyrY = ma.Float(required=True)
+    gyrZ = ma.Float(required=True)
+    bpm = ma.Float(required=True)
+    montre_id = ma.Integer(required=True)
+
+  
+
+
+class UpdateDonnee_collecteesSchema(Donnee_collecteesSchema):
+    accX = ma.Float(required=True)
+    accY = ma.Float(required=True)
+    accZ = ma.Float(required=True)
+    gyrX = ma.Float(required=True)
+    gyrY = ma.Float(required=True)
+    gyrZ = ma.Float(required=True)
+    bpm = ma.Float(required=True)
+
+class Resultat_journaliersSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Resultat_journaliers
+        ordered = True
+
+    id = ma.auto_field(dump_only=True)
+    nbAlerte = ma.Integer(required=True)
+    intensiteSed = ma.Float(required=True)
+    intensiteLeg = ma.Float(required=True)
+    intesiteMod = ma.Float(required=True)
+    intensiteVig = ma.Float(required=True)
+    dureeHorsLigne = ma.Float(required=True)
+    dureePort = ma.Float(required=True)
+    date = ma.String(required=True)
+
+    patient_id = ma.Integer(required=True)
+
+  
+
+
+class UpdateResultat_journaliersSchema(Resultat_journaliersSchema):
+    nbAlerte = ma.Integer(required=True)
+    intensiteSed = ma.Float(required=True)
+    intensiteLeg = ma.Float(required=True)
+    intesiteMod = ma.Float(required=True)
+    intensiteVig = ma.Float(required=True)
+    dureeHorsLigne = ma.Float(required=True)
+    dureePort = ma.Float(required=True)
+    date = ma.String(required=True)

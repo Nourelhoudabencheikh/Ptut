@@ -1,8 +1,8 @@
 """create table tokens
 
-Revision ID: 272a90310326
-Revises: 4d7d423984bb
-Create Date: 2024-03-06 17:29:14.424670
+Revision ID: 8a11753cab79
+Revises: b1f61c04c387
+Create Date: 2024-03-22 10:11:36.460415
 
 """
 from typing import Sequence, Union
@@ -12,10 +12,10 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '272a90310326'
-down_revision: Union[str, None] = '4d7d423984bb'
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+revision = '8a11753cab79'
+down_revision='b1f61c04c387'
+branch_labels= None
+depends_on = None
 
 
 def upgrade(engine_name: str) -> None:

@@ -1,8 +1,8 @@
-"""make password hash longer to work with
+"""create table make password hash longer to work with
 
-Revision ID: 107dd48f78e8
-Revises: 272a90310326
-Create Date: 2024-03-06 17:29:22.132878
+Revision ID: 9fe082cb8ce3
+Revises: cdd2275b45c6
+Create Date: 2024-03-22 10:11:37.812523
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision ='107dd48f78e8'
-down_revision = '272a90310326'
+revision = '9fe082cb8ce3'
+down_revision = 'cdd2275b45c6'
 branch_labels = None
 depends_on = None
 

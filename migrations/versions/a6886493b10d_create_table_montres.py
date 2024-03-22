@@ -1,8 +1,8 @@
 """create table montres
 
-Revision ID: 5632ca7bb399
-Revises: 67b689fa4fe7
-Create Date: 2024-03-20 13:35:07.574446
+Revision ID: a6886493b10d
+Revises: 0255c1b0f2d4
+Create Date: 2024-03-22 10:11:39.168069
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5632ca7bb399'
-down_revision= '67b689fa4fe7'
+revision = 'a6886493b10d'
+down_revision = '0255c1b0f2d4'
 branch_labels = None
 depends_on = None
 
@@ -29,7 +29,11 @@ def downgrade(engine_name: str) -> None:
 def upgrade_() -> None:
     op.create_table('montres',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('etat', sa.String(length=64), nullable=False),
+    sa.Column('montre', sa.String(length=64), nullable=False),
+    sa.Column('debut', sa.DateTime, nullable=False),
+    sa.Column('fin', sa.DateTime, nullable=False),
+    sa.Column('etat', sa.String(length=10), nullable=False),
+    sa.Column('marque', sa.String(length=100), nullable=False),
     sa.Column('patient_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['patient_id'], ['patients.id'], ),
     sa.PrimaryKeyConstraint('id')

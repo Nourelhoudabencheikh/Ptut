@@ -10,11 +10,11 @@ token_auth = HTTPTokenAuth()
 
 
 @basic_auth.verify_password
-def verify_password(username, password):
-    if username and password:
-        user = db.session.scalar(User.select().filter_by(username=username))
+def verify_password(nom, password):
+    if nom and password:
+        user = db.session.scalar(User.select().filter_by(nom=nom))
         if user is None:
-            user = db.session.scalar(User.select().filter_by(email=username))
+            user = db.session.scalar(User.select().filter_by(email=nom))
         if user and user.verify_password(password):
             return user
 
