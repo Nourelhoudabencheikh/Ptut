@@ -62,3 +62,28 @@ def delete(id):
     db.session.delete(donnee_collectee)
     db.session.commit()
     return {}
+
+
+@donnee_collectees.route('/donnee_collectees/json', methods=['POST'])
+def json_post():
+    if request.is_json:
+        req= request.get_son()
+        for i in range(len(req)):
+            _timestamp=req[i['timestamp']]
+            _montre_id=req[i['montre_id']]
+            _accX=req[i['accX']]
+            _accY=req[i['accY']]
+            _accZ=req[i['accZ']]
+            _gyrX=req[i['gyrX']]
+            _gyrY=req[i['gyrY']]
+            _gyrZ=req[i['gyrZ']]
+            _bpm=req[i['bpm']]
+
+            donnee = Donnee_collectees(dateTime=_timestamp, 
+                                       accX=_accX,accY=_accY,accZ=_accZ,gyrX=_gyrX,gyrY=_gyrY,gyrZ=_gyrZ,bpm=_bpm,montre_id=_montre_id)
+            db.session.add(donnee)
+            db.session.comit()
+
+        return {'message': 'données reçues avec succées '}, 200    
+    else: 
+        return {'message': 'erreur de reception de données  '}, 400   
