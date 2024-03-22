@@ -81,3 +81,13 @@ def delete(id):
     db.session.delete(montre)
     db.session.commit()
     return {}
+
+@montres.route('/montres/check/<int:id>', methods=['GET'])
+@other_responses({404: 'montre not found'})
+def checkMontre(id):
+    montre = db.session.get(Montre, id)
+    print(montre,file=sys.stderr)
+    if montre:
+         return {'exist': True}, 200    
+    else:
+        return {'exist': False}, 404 
