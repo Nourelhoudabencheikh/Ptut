@@ -75,3 +75,16 @@ def put(data):
     return user
 
 
+# Endpoint pour supprimer un user
+@users.route('/users/<int:id>', methods=['DELETE'])
+@authenticate(token_auth)
+@response(EmptySchema, 204)
+@other_responses({404: 'User not found'})
+def delete(id):
+    """Supprimer un User"""
+    user = db.session.get(User, id)
+    db.session.delete(user)
+    db.session.commit()
+    return {}
+
+

@@ -1,7 +1,6 @@
 from apifairy.decorators import other_responses
-from flask import Blueprint, abort
 from apifairy import authenticate, body, response
-from flask import Blueprint, abort, request
+from flask import Blueprint, abort, request, Response
 from flask_httpauth import HTTPBasicAuth
 from api.app import db
 from api.models import Montre
@@ -9,6 +8,8 @@ from api.schemas import MontreSchema, EmptySchema, UpdateMontreSchema
 from api.auth import token_auth
 from api.decorators import paginated_response
 import sys
+from io import StringIO
+import csv
 
 montres = Blueprint('montres', __name__)
 montre_schema = MontreSchema()
@@ -91,3 +92,56 @@ def checkMontre(id):
          return {'exist': True}, 200    
     else:
         return {'exist': False}, 404 
+
+# download the recording sorted by timestamp as a csv file
+@montres.route('/montres/download', methods=["GET"])
+def download():
+    # Request username and token of recording
+    username = request.args.get('username')
+
+    # generate CSV file from recording
+    def generate(username):
+        # get selected data and write them in a list grouped by parenthesis
+        with montres.app_context():
+            if username != '':
+                selectedData = db.query.order_by(db._timestamp).filter_by(_user=username)
+    
+            else:
+                selectedData = db.query.order_by(db._timestamp)
+
+            log = []
+            for i in selectedData:
+                log.append((i.id, i.montre, i.debut, i.fin, i.etat,
+                            i.marque, i.patient_id))
+
+        data = StringIO()
+        w = csv.writer(data)
+
+        # write header of CSV
+        w.writerow(('id', 'montre', 'debut', 'fin', 'etat', 'marque', 'patient_id'))
+        yield data.getvalue()
+        data.seek(0)
+        data.truncate(0)
+
+        # write each log item
+        for item in log:
+            w.writerow((
+                item[0],
+                item[1],
+                item[2],
+                item[3],
+                item[4],
+                item[5],
+                item[6],
+            
+            ))
+            yield data.getvalue()
+            data.seek(0)
+            data.truncate(0)
+
+    # stream the response as the data is generated
+    response = Response(generate(username), mimetype='text/csv')
+
+    # add a filename
+    response.headers.set("Content-Disposition", "attachment", filename=username + ".csv")
+    return response
